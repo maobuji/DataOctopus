@@ -2,14 +2,11 @@
 <project name="CreateDXP" default="SHOWMESSAGE" basedir=".">
 
 	<property name="product-config" location="${basedir}/product-config" description="公共配置目录" />
-	<property name="product-backup" location="${product-config}/backup" description="配置文件和数据的备份目录" />
-	<property name="productfolder" location="${product-config}/product" description="新构建产品的目录" />
+	<property name="installsoft" location="${product-config}/installsoft" description="二进制安装文件" />
+	<property name="replaceconfig" location="${product-config}/replaceconfig" description="用于替换的配置文件目录" />
 
 	<property name="creatProductFolder" location="${basedir}" description="部署环境的目录" />
 	<property file="${basedir}/config.properties" />
-	<property file="${basedir}/product-config/config-agent.properties" />
-	<property file="${basedir}/product-config/config-agent-system.properties" />
-
 
 	<!--引用jar包-->
 	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${product-config}/lib/ant-contrib-1.0b3.jar" />
@@ -23,23 +20,17 @@
 	<property name="mysql_driver_path" location="${product-config}/lib/mysql-connector-java-5.1.20-bin.jar" />
 
 	<target name="SHOWMESSAGE">
-		<echo message="adxp测试环境构建工具" />
-		<echo message="维护人：范明明 吴艳珍" />
-		<echo message="部署工具的配置信息在config.properties和product-config/config-agent.properties文件中，启用工具前，请提前做好配置" />
-		<echo message="非研发环境需要手工拷贝产品包到product-config/product目录中" />
+		<echo message="环境构建工具" />
+		<echo message="维护人：maobuji" />
+		<echo message="部署工具的配置信息在config.properties文件中，启用工具前，请提前做好配置" />
+		<echo message="需要手工拷贝相关二进制包到product-config/installsoft目录中" />
 
 		<echo message="可用命令如下：" />
-		<echo message="ant getprozip   :研发环境产品包下载，非研发环境不要执行该命令" />
 		<echo message="ant reall       :清理现有环境，并重新生成全新环境" />
-		<echo message="ant reagent     :清理现有环境，并重新生成节点" />
-		<echo message="ant remysql64db :重新生成一个mysql64位DB" />
-		<echo message="ant remysql32db :重新生成一个mysql32位DB" />
-		<echo message="ant updateall   :保留现有环境中的配置，升级现有环境" />
-		<echo message="ant inittestdb  :生成测试数据库" />
-		<echo message="ant readxpdb    :根据测试库的配置，在对应数据库上删除并重新创建一个ADXP数据库" />
-		<echo message="ant agentsp     :将product-config/agentsp下的jar包放入各agent节点中" />
 		<echo message="请使用ant -p 命令查看所有可用任务" />
 	</target>
+
+
 
 	<target name="getprozip" description="研发环境自动下载产品包">
 		<delete dir="${productfolder}" />

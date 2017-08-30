@@ -60,5 +60,9 @@
 
 	<target name="recanal" description="重新生成cannal配置">
 		<untar compression="gzip" src="${installsoft}/canal.deployer-1.0.24.tar.gz" dest="${creatProductFolder}/canal"/>
+		<copy todir="${creatProductFolder}/canal">
+			<fileset dir="${replaceconfig}/canal">
+			</fileset>
+		</copy>
 	</target>
 </project>

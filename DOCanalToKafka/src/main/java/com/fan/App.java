@@ -1,13 +1,11 @@
 package com.fan;
 
 import com.alibaba.otter.canal.client.CanalConnector;
-import com.alibaba.otter.canal.client.CanalConnectors;
-import com.alibaba.otter.canal.common.utils.AddressUtils;
 import com.alibaba.otter.canal.protocol.CanalEntry;
 import com.alibaba.otter.canal.protocol.Message;
+import com.fan.canal.CanalFactory;
 import org.jetbrains.annotations.NotNull;
 
-import java.net.InetSocketAddress;
 import java.util.List;
 
 /**
@@ -15,10 +13,30 @@ import java.util.List;
  */
 public class App {
 
+
+    public static void doSleep(long sleepTime) {
+
+        try {
+            Thread.sleep(sleepTime);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public static void main(String args[]) {
+
+
+        while (true) {
+            CanalConnector connector = CanalFactory.getCanalConnector();
+            if (connector == null) {
+                doSleep(1000);
+                continue;
+            }
+        }
+
         // 创建链接
-        CanalConnector connector = CanalConnectors
-                .newSingleConnector(new InetSocketAddress(AddressUtils.getHostIp(), 11111), "example", "", "");
+
         int batchSize = 1000;
 
         try {
@@ -55,7 +73,7 @@ public class App {
             if (entry.getEntryType() == CanalEntry.EntryType.TRANSACTIONBEGIN
                     || entry.getEntryType() == CanalEntry.EntryType.TRANSACTIONEND) {
 
-                System.out.println("trans:"+entry.getEntryType().toString()+" m="+entry.getSerializedSize());
+                System.out.println("trans:" + entry.getEntryType().toString() + " m=" + entry.getSerializedSize());
                 continue;
             }
 
@@ -70,7 +88,7 @@ public class App {
             CanalEntry.EventType eventType = rowChage.getEventType();
             System.out.println(String.format("================> binlog[%s:%s] , name[%s,%s] , eventType : %s,version : %s,entrytype : %s",
                     entry.getHeader().getLogfileName(), entry.getHeader().getLogfileOffset(),
-                    entry.getHeader().getSchemaName(), entry.getHeader().getTableName(), eventType,entry.getHeader().getExecuteTime(),entry.getEntryType().toString()));
+                    entry.getHeader().getSchemaName(), entry.getHeader().getTableName(), eventType, entry.getHeader().getExecuteTime(), entry.getEntryType().toString()));
 
 
             for (CanalEntry.RowData rowData : rowChage.getRowDatasList()) {

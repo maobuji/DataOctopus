@@ -30,6 +30,7 @@
 		<echo message="ant reall       :清理现有环境，并重新生成全新环境" />
 		<echo message="ant remysql       " />
 		<echo message="ant recanal       " />
+		<echo message="ant rekafka       " />
 		<echo message="请使用ant -p 命令查看所有可用任务" />
 	</target>
 
@@ -45,13 +46,13 @@
 		<delete dir="${creatProductFolder}/mysql" />
 		<delete dir="${creatProductFolder}/mysql-5.7.17-winx64" />
 		<unzip src="${installsoft}/mysql-5.7.17-winx64.zip" dest="${creatProductFolder}" />
-		<copy todir="${creatProductFolder}/mysql">
+		<copy todir="${creatProductFolder}/mysql" overwrite="true">
 			<fileset dir="${creatProductFolder}/mysql-5.7.17-winx64">
 			</fileset>
 		</copy>
 		<delete dir="${creatProductFolder}/mysql-5.7.17-winx64" />
 
-		<copy todir="${creatProductFolder}/mysql">
+		<copy todir="${creatProductFolder}/mysql" overwrite="true">
 			<fileset dir="${replaceconfig}/mysql">
 			</fileset>
 		</copy>
@@ -62,7 +63,7 @@
 	<target name="recanal" description="重新生成cannal配置">
 		<delete dir="${creatProductFolder}/canal" />
 		<untar compression="gzip" src="${installsoft}/canal.deployer-1.0.24.tar.gz" dest="${creatProductFolder}/canal"/>
-		<copy todir="${creatProductFolder}/canal">
+		<copy todir="${creatProductFolder}/canal" overwrite="true">
 			<fileset dir="${replaceconfig}/canal">
 			</fileset>
 		</copy>
@@ -73,14 +74,14 @@
 		<delete dir="${creatProductFolder}/kafka_2.11-0.11.0.0" />
 		<mkdir dir="${creatProductFolder}/kafka" />
 		<untar compression="gzip" src="${installsoft}/kafka_2.11-0.11.0.0.tgz" dest="${creatProductFolder}"/>
-		<copy todir="${creatProductFolder}/kafka">
+		<copy todir="${creatProductFolder}/kafka" overwrite="true">
 			<fileset dir="${creatProductFolder}/kafka_2.11-0.11.0.0">
 			</fileset>
 		</copy>
 		<delete dir="${creatProductFolder}/kafka_2.11-0.11.0.0" />
 
-		<copy todir="${creatProductFolder}/kafka">
-			<fileset dir="${replaceconfig}/kakfa">
+		<copy todir="${creatProductFolder}/kafka" overwrite="true">
+			<fileset dir="${replaceconfig}/kafka">
 			</fileset>
 		</copy>
 

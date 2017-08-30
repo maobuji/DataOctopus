@@ -44,7 +44,7 @@ public class App {
                 // connector.rollback(batchId); // 处理失败, 回滚数据
             }
 
-            System.out.println("empty too many times, exit");
+
         } finally {
             connector.disconnect();
         }

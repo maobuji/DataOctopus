@@ -35,7 +35,7 @@
 
 	<!--*****************************************总控命令**************************************************-->
 
-	<target name="reall" depends="remysql" description="重新生成所有环境" >
+	<target name="reall" depends="remysql,recanal" description="重新生成所有环境" >
 	</target>
 
 

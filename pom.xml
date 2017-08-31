@@ -12,6 +12,7 @@
         <module>TestkafkaRW</module>
         <module>TestCanal</module>
         <module>DOCanalToKafka</module>
+        <module>DOJsoupToMysql</module>
     </modules>
 
 

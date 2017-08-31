@@ -1,15 +1,29 @@
 input {
-   kafka {
-     bootstrap_servers => "127.0.0.1:9092"    
-     topics => "mysqlTopic"
-     group_id => "es2"
-     max_partition_fetch_bytes=> "4194304"  
-     
-   }
+  kafka {
+    bootstrap_servers => "127.0.0.1:9092"
+    topics => "mysqlTopic"
+    group_id => "es2"
+    max_partition_fetch_bytes=> "4194304"
+    codec => 'json'
+}
 }
 
+
+
+
 output {
-  stdout{} 
+  stdout {
+     codec => "json"
+  }
+
+  elasticsearch {
+     hosts  => "127.0.0.1:9200"
+     index => "%{_schemaName}"
+     document_type => "%{_tableName}"
+     document_id=>"%{_key}"
+     action => "%{_opType}"
+     codec => "json"
+   }
 }
 
 

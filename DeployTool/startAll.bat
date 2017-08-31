@@ -14,6 +14,14 @@ ping 127.0.0.1 -n 10 >nul
 
 cd  %home%\kafka\bin\windows
 start kafka-server-start.bat ../../config/server.properties
+ping 127.0.0.1 -n 10 >nul
+
+cd  %home%\elasticsearch\bin
+start elasticsearch.bat
+ping 127.0.0.1 -n 10 >nul
+
+cd  %home%\logstash\bin
+logstash.bat -f ../ser-config/K2E.json
 
 
 

@@ -47,17 +47,7 @@ public class MessageToJsonListTransfer {
             String tableName = entry.getHeader().getTableName();
 
             for (CanalEntry.RowData rowData : rowChage.getRowDatasList()) {
-                if (eventType == CanalEntry.EventType.DELETE) {
-                    transToJson(lsJsonData,schemaName,tableName,rowData.getBeforeColumnsList(),eventType);
-                } else if (eventType == CanalEntry.EventType.INSERT) {
-                    transToJson(lsJsonData,schemaName,tableName,rowData.getAfterColumnsList(),eventType);
-
-                } else {
-//                    System.out.println("-------> before");
-//                    printColumn(rowData.getBeforeColumnsList());
-//                    System.out.println("-------> after");
-                    transToJson(lsJsonData,schemaName,tableName,rowData.getAfterColumnsList(),eventType);
-                }
+                transToJson(lsJsonData, schemaName, tableName, rowData, eventType);
             }
 
 
@@ -65,27 +55,70 @@ public class MessageToJsonListTransfer {
         return lsJsonData;
     }
 
-    public void transToJson(List<String> lsJsonData, String schemaName, String tableName, List<CanalEntry.Column> columns, CanalEntry.EventType eventType) {
-        Map<String, Object> dataMap = new HashMap<String, Object>();
-        dataMap.put("schemaName", schemaName);
-        dataMap.put("tableName", tableName);
+    public void transToJson(List<String> lsJsonData, String schemaName, String tableName, CanalEntry.RowData rowData, CanalEntry.EventType eventType) {
+
+        // 如果是更新话，需要产生两条记录，先删除，再插入
+        Map<String, Object> beforedataMap = new HashMap<String, Object>();
+        Map<String, Object> afterdataMap = new HashMap<String, Object>();
+        beforedataMap.put("_schemaName", schemaName);
+        beforedataMap.put("_tableName", tableName);
+        afterdataMap.put("_schemaName", schemaName);
+        afterdataMap.put("_tableName", tableName);
+
+        List<CanalEntry.Column> beforeRowDataColumns = rowData.getBeforeColumnsList();
+        List<CanalEntry.Column> afterRowDataColumns = rowData.getAfterColumnsList();
+
+        if (eventType == CanalEntry.EventType.INSERT) {
+            afterdataMap.put("_opType", "index");
+            for (CanalEntry.Column column : afterRowDataColumns) {
+                // 如果是主键，则将数据加进去
+                if (column.getIsKey()) {
+                    afterdataMap.put("_key", column.getValue());
+                }
+                afterdataMap.put(column.getName(), column.getValue());
+            }
+            String jsonString = JSON.toJSONString(afterdataMap);
+            lsJsonData.add(jsonString);
+            return;
+        }
 
         if (eventType == CanalEntry.EventType.DELETE) {
-            dataMap.put("opType", "delete");
-        } else if (eventType == CanalEntry.EventType.INSERT) {
-            dataMap.put("opType", "insert");
-        } else {
-            dataMap.put("opType", "update");
+            beforedataMap.put("_opType", "delete");
+            for (CanalEntry.Column column : beforeRowDataColumns) {
+                // 如果是主键，则将数据加进去
+                if (column.getIsKey()) {
+                    beforedataMap.put("_key", column.getValue());
+                }
+                beforedataMap.put(column.getName(), column.getValue());
+            }
+            String jsonString = JSON.toJSONString(beforedataMap);
+            lsJsonData.add(jsonString);
+            return;
         }
 
-        for (CanalEntry.Column column : columns) {
-            System.out.println(column.getSqlType());
-            dataMap.put(column.getName(), column.getValue());
-        }
+        if (eventType == CanalEntry.EventType.UPDATE) {
+            beforedataMap.put("_opType", "delete");
+            for (CanalEntry.Column column : beforeRowDataColumns) {
+                // 如果是主键，则将数据加进去
+                if (column.getIsKey()) {
+                    beforedataMap.put("_key", column.getValue());
+                }
+                beforedataMap.put(column.getName(), column.getValue());
+            }
+            String jsonString = JSON.toJSONString(beforedataMap);
+            lsJsonData.add(jsonString);
 
-        String jsonString=JSON.toJSONString(dataMap);
-        System.out.println(jsonString);
-        lsJsonData.add(jsonString);
+            afterdataMap.put("_opType", "index");
+            for (CanalEntry.Column column : afterRowDataColumns) {
+                // 如果是主键，则将数据加进去
+                if (column.getIsKey()) {
+                    afterdataMap.put("_key", column.getValue());
+                }
+                afterdataMap.put(column.getName(), column.getValue());
+            }
+            String jsonString1 = JSON.toJSONString(afterdataMap);
+            lsJsonData.add(jsonString1);
+        }
 
     }
 

@@ -2,7 +2,8 @@
 <project name="CreateDXP" default="SHOWMESSAGE" basedir=".">
 
 	<property name="product-config" location="${basedir}/product-config" description="公共配置目录" />
-	<property name="installsoft" location="${product-config}/installsoft" description="二进制安装文件" />
+	<!--property name="installsoft" location="${product-config}/installsoft" description="二进制安装文件" /-->
+	<property name="installsoft" location="${basedir}/../installsoft" description="二进制安装文件" />
 	<property name="replaceconfig" location="${product-config}/replaceconfig" description="用于替换的配置文件目录" />
 
 	<property name="creatProductFolder" location="${basedir}" description="部署环境的目录" />

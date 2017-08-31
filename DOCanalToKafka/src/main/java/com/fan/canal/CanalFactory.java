@@ -18,7 +18,7 @@ public class CanalFactory {
 
         if (connector == null) {
             try {
-                CanalConnector connector = CanalConnectors
+                connector = CanalConnectors
                         .newSingleConnector(new InetSocketAddress(AddressUtils.getHostIp(), 11111), "example", "", "");
                 connector.connect();
                 connector.subscribe(".*\\..*");
@@ -29,5 +29,10 @@ public class CanalFactory {
             }
         }
         return connector;
+    }
+
+    public static void release() {
+        connector.disconnect();
+        connector = null;
     }
 }

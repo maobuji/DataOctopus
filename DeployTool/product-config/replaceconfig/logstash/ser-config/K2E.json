@@ -1,0 +1,15 @@
+input {
+   kafka {
+     bootstrap_servers => "127.0.0.1:9092"    
+     topics => "mysqlTopic"
+     group_id => "es2"
+     max_partition_fetch_bytes=> "4194304"  
+     
+   }
+}
+
+output {
+  stdout{} 
+}
+
+

@@ -1,11 +1,13 @@
 package com.fan;
 
-import com.alibaba.otter.canal.client.CanalConnector;
 import com.alibaba.otter.canal.protocol.CanalEntry;
 import com.alibaba.otter.canal.protocol.Message;
-import com.fan.canal.CanalFactory;
+import com.fan.canal.CanalService;
+import com.fan.kafka.MessageCenter;
+import com.fan.transfer.MessageToJsonListTransfer;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,9 +15,7 @@ import java.util.List;
  */
 public class App {
 
-
     public static void doSleep(long sleepTime) {
-
         try {
             Thread.sleep(sleepTime);
         } catch (InterruptedException e) {
@@ -25,92 +25,40 @@ public class App {
     }
 
     public static void main(String args[]) {
-
+        System.out.println("开始抓取数据");
 
         while (true) {
-            CanalConnector connector = CanalFactory.getCanalConnector();
-            if (connector == null) {
+            CanalService canalService = new CanalService();
+            Message message = canalService.read();
+
+            if (message == null || message.getId() == -1 || message.getEntries().size() == 0) {
                 doSleep(1000);
-                continue;
-            }
-        }
-
-        // 创建链接
-
-        int batchSize = 1000;
-
-        try {
-            connector.connect();
-            connector.subscribe(".*\\..*");
-            connector.rollback();
-            int totalEmtryCount = 1200;
-            while (true) {
-                Message message = connector.getWithoutAck(batchSize); // 获取指定数量的数据
-                long batchId = message.getId();
-                int size = message.getEntries().size();
-                if (batchId == -1 || size == 0) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    printEntry(message.getEntries());
-                }
-
-                connector.ack(batchId); // 提交确认
-                // connector.rollback(batchId); // 处理失败, 回滚数据
-            }
-
-
-        } finally {
-            connector.disconnect();
-        }
-    }
-
-    private static void printEntry(@NotNull List<CanalEntry.Entry> entrys) {
-        for (CanalEntry.Entry entry : entrys) {
-            if (entry.getEntryType() == CanalEntry.EntryType.TRANSACTIONBEGIN
-                    || entry.getEntryType() == CanalEntry.EntryType.TRANSACTIONEND) {
-
-                System.out.println("trans:" + entry.getEntryType().toString() + " m=" + entry.getSerializedSize());
+                System.out.println("没有发现数据");
                 continue;
             }
 
-            CanalEntry.RowChange rowChage = null;
+            MessageToJsonListTransfer messageToJsonListTransfer = new MessageToJsonListTransfer();
+            List<String> lsJsonDate = new ArrayList<String>();
             try {
-                rowChage = CanalEntry.RowChange.parseFrom(entry.getStoreValue());
-            } catch (Exception e) {
-                throw new RuntimeException("ERROR ## parser of eromanga-event has an error , data:" + entry.toString(),
-                        e);
+                lsJsonDate = messageToJsonListTransfer.transfer(message);
+            } catch (Exception ex) {
+                doSleep(1000);
+                canalService.roback();
+                ex.printStackTrace();
+                continue;
             }
 
-            CanalEntry.EventType eventType = rowChage.getEventType();
-            System.out.println(String.format("================> binlog[%s:%s] , name[%s,%s] , eventType : %s,version : %s,entrytype : %s",
-                    entry.getHeader().getLogfileName(), entry.getHeader().getLogfileOffset(),
-                    entry.getHeader().getSchemaName(), entry.getHeader().getTableName(), eventType, entry.getHeader().getExecuteTime(), entry.getEntryType().toString()));
-
-
-            for (CanalEntry.RowData rowData : rowChage.getRowDatasList()) {
-                if (eventType == CanalEntry.EventType.DELETE) {
-                    printColumn(rowData.getBeforeColumnsList());
-                } else if (eventType == CanalEntry.EventType.INSERT) {
-                    printColumn(rowData.getAfterColumnsList());
-                } else {
-                    System.out.println("-------> before");
-                    printColumn(rowData.getBeforeColumnsList());
-                    System.out.println("-------> after");
-                    printColumn(rowData.getAfterColumnsList());
-                }
+            try {
+                MessageCenter.sendMessage(lsJsonDate);
+            } catch (Exception ex) {
+                doSleep(1000);
+                canalService.roback();
+                ex.printStackTrace();
+                continue;
             }
+            canalService.ack(message.getId());
         }
     }
 
 
-    private static void printColumn(@NotNull List<CanalEntry.Column> columns) {
-        for (CanalEntry.Column column : columns) {
-
-            System.out.println(column.getName() + " : " + column.getValue() + "    update=" + column.getUpdated());
-        }
-    }
 }

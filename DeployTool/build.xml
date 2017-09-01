@@ -49,11 +49,8 @@
 		<delete dir="${creatProductFolder}/mysql" />
 		<delete dir="${creatProductFolder}/mysql-5.7.17-winx64" />
 		<unzip src="${installsoft}/mysql-5.7.17-winx64.zip" dest="${creatProductFolder}" />
-		<copy todir="${creatProductFolder}/mysql" overwrite="true">
-			<fileset dir="${creatProductFolder}/mysql-5.7.17-winx64">
-			</fileset>
-		</copy>
-		<delete dir="${creatProductFolder}/mysql-5.7.17-winx64" />
+
+		<rename src="${creatProductFolder}/mysql-5.7.17-winx64" dest="${creatProductFolder}/mysql"/>
 
 		<copy todir="${creatProductFolder}/mysql" overwrite="true">
 			<fileset dir="${replaceconfig}/mysql">
@@ -77,11 +74,8 @@
 		<delete dir="${creatProductFolder}/kafka_2.11-0.11.0.0" />
 		<mkdir dir="${creatProductFolder}/kafka" />
 		<untar compression="gzip" src="${installsoft}/kafka_2.11-0.11.0.0.tgz" dest="${creatProductFolder}"/>
-		<copy todir="${creatProductFolder}/kafka" overwrite="true">
-			<fileset dir="${creatProductFolder}/kafka_2.11-0.11.0.0">
-			</fileset>
-		</copy>
-		<delete dir="${creatProductFolder}/kafka_2.11-0.11.0.0" />
+
+		<rename src="${creatProductFolder}/kafka_2.11-0.11.0.0" dest="${creatProductFolder}/kafka"/>
 
 		<copy todir="${creatProductFolder}/kafka" overwrite="true">
 			<fileset dir="${replaceconfig}/kafka">
@@ -94,12 +88,7 @@
 		<delete dir="${creatProductFolder}/logstash-5.5.2" />
 		<unzip src="${installsoft}/logstash-5.5.2.zip" dest="${creatProductFolder}" />
 
-
-		<copy todir="${creatProductFolder}/logstash" overwrite="true">
-			<fileset dir="${creatProductFolder}/logstash-5.5.2">
-			</fileset>
-		</copy>
-		<delete dir="${creatProductFolder}/logstash-5.5.2" />
+		<rename src="${creatProductFolder}/logstash-5.5.2" dest="${creatProductFolder}/logstash"/>
 
 		<copy todir="${creatProductFolder}/logstash" overwrite="true">
 			<fileset dir="${replaceconfig}/logstash">
@@ -112,14 +101,24 @@
 		<delete dir="${creatProductFolder}/elasticsearch-5.5.2" />
 		<unzip src="${installsoft}/elasticsearch-5.5.2.zip" dest="${creatProductFolder}" />
 
-		<copy todir="${creatProductFolder}/elasticsearch" overwrite="true">
-			<fileset dir="${creatProductFolder}/elasticsearch-5.5.2">
-			</fileset>
-		</copy>
-		<delete dir="${creatProductFolder}/elasticsearch-5.5.2" />
+		<rename src="${creatProductFolder}/elasticsearch-5.5.2" dest="${creatProductFolder}/elasticsearch"/>
 
 		<copy todir="${creatProductFolder}/elasticsearch" overwrite="true">
 			<fileset dir="${replaceconfig}/elasticsearch">
+			</fileset>
+		</copy>
+		<!--安装ik分词插件-->
+		<unzip src="${installsoft}/elasticsearch-analysis-ik-5.5.2.zip" dest="${creatProductFolder}/elasticsearch/plugins" />
+        <rename src="${creatProductFolder}/elasticsearch/plugins/elasticsearch" dest="${creatProductFolder}/elasticsearch/plugins/elasticsearch-analysis-ik"/>
+	</target>
+
+	<target name="rekibana" description="重新生成kibana配置">
+		<delete dir="${creatProductFolder}/kibana" />
+		<delete dir="${creatProductFolder}/kibana-5.5.2-windows-x86" />
+		<unzip src="${installsoft}/kibana-5.5.2-windows-x86.zip" dest="${creatProductFolder}" />
+		<rename src="${creatProductFolder}/kibana-5.5.2-windows-x86" dest="${creatProductFolder}/kibana"/>
+		<copy todir="${creatProductFolder}/kibana" overwrite="true">
+			<fileset dir="${replaceconfig}/kibana">
 			</fileset>
 		</copy>
 	</target>

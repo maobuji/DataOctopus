@@ -32,14 +32,15 @@
 		<echo message="ant remysql       " />
 		<echo message="ant recanal       " />
 		<echo message="ant rekafka       " />
-		<echo message="ant relogstash       " />
-		<echo message="ant rees       " />
+		<echo message="ant relogstash    " />
+		<echo message="ant rees          " />
+		<echo message="ant rekibana      " />
 		<echo message="请使用ant -p 命令查看所有可用任务" />
 	</target>
 
 	<!--*****************************************总控命令**************************************************-->
 
-	<target name="reall" depends="remysql,recanal,rekafka,relogstash,rees" description="重新生成所有环境" >
+	<target name="reall" depends="remysql,recanal,rekafka,relogstash,rees,rekibana" description="重新生成所有环境" >
 	</target>
 
 

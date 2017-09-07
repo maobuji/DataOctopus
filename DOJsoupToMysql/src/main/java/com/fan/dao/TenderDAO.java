@@ -12,8 +12,8 @@ public class TenderDAO {
 
     private Connection conn;
 
-    private static String updateSql = "update tendernotice set orgName=?,tenderName=?,tenderDate=?,tenderType=? where tenderKey=? ";
-    private static String insertSql = "insert into tendernotice(tenderKey,orgName,tenderName,tenderDate,tenderType) values(?,?,?,?,?)";
+    private static String updateSql = "update tendernotice set orgName=?,tenderName=?,tenderDate=?,tenderType=?,tenderYear=?,tenderYearMonth=? where tenderKey=? ";
+    private static String insertSql = "insert into tendernotice(tenderKey,orgName,tenderName,tenderDate,tenderType,tenderYear,tenderYearMonth) values(?,?,?,?,?,?,?)";
 
     public boolean update(TenderInfo tenderInfo) throws SQLException {
         if (conn == null) {
@@ -31,6 +31,9 @@ public class TenderDAO {
         updatePs.setString(index++, tenderInfo.getTenderName());
         updatePs.setString(index++, tenderInfo.getTenderDate());
         updatePs.setString(index++, tenderInfo.getTenderType());
+        updatePs.setString(index++, tenderInfo.getTenderYear());
+        updatePs.setString(index++, tenderInfo.getTenderYearMonth());
+
         updatePs.setString(index++, tenderInfo.getTenderKey());
         // 先更新
         int i = updatePs.executeUpdate();
@@ -47,6 +50,8 @@ public class TenderDAO {
         insertPs.setString(index++, tenderInfo.getTenderName());
         insertPs.setString(index++, tenderInfo.getTenderDate());
         insertPs.setString(index++, tenderInfo.getTenderType());
+        insertPs.setString(index++, tenderInfo.getTenderYear());
+        insertPs.setString(index++, tenderInfo.getTenderYearMonth());
         insertPs.executeUpdate();
 
         return true;

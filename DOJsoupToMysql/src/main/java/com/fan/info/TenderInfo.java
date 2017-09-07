@@ -13,9 +13,29 @@ public class TenderInfo {
 
     // 招标日期
     private String tenderDate;
-    
+
     // 招标ID
     private String tenderKey;
+
+    private String tenderYear;
+
+    public String getTenderYearMonth() {
+        return tenderYearMonth;
+    }
+
+    public void setTenderYearMonth(String tenderYearMonth) {
+        this.tenderYearMonth = tenderYearMonth;
+    }
+
+    private String tenderYearMonth;
+
+    public String getTenderYear() {
+        return tenderYear;
+    }
+
+    public void setTenderYear(String tenderYear) {
+        this.tenderYear = tenderYear;
+    }
 
     public String getTenderKey() {
         return tenderKey;

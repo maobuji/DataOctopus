@@ -1,8 +1,7 @@
 package com.fan;
 
-import com.alibaba.fastjson.JSON;
+
 import com.fan.dao.TenderDAO;
-import com.fan.info.ESImpIndex;
 import com.fan.info.TenderInfo;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -26,7 +25,7 @@ public class App {
             f.delete();
         }
 
-        TenderDAO tenderDAO=new TenderDAO();
+        TenderDAO tenderDAO = new TenderDAO();
         OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(f), "UTF-8");
 
         String postUrl = "https://b2b.10086.cn/b2b/main/listVendorNoticeResult.html?noticeBean.noticeType=2";
@@ -61,11 +60,7 @@ public class App {
             Elements mycontext = doc.body().getElementsByTag("tbody").get(0).getElementsByTag("tr");
             int size = mycontext.size();
 
-            // 生成导入行字符串
-            ESImpIndex esImpIndex = new ESImpIndex();
-            esImpIndex.geteXImpColumn().setIndex("aa");
-            esImpIndex.geteXImpColumn().setType("bb");
-            String jsonImpIndexString = JSON.toJSONString(esImpIndex);
+
 
             TenderInfo tenderInfo = new TenderInfo();
 
@@ -88,6 +83,17 @@ public class App {
 
                 }
                 tenderInfo.setTenderDate(ss.children().get(3).text());
+
+                String date = tenderInfo.getTenderDate();
+                String[] dates = date.split("-");
+                tenderInfo.setTenderYear(dates[0]);
+                if (dates[1].length() == 1) {
+                    tenderInfo.setTenderYearMonth(dates[0]+"0"+dates[1]);
+                } else {
+                    tenderInfo.setTenderYearMonth(dates[0]+dates[1]);
+                }
+
+
 
                 tenderDAO.update(tenderInfo);
 

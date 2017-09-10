@@ -7,7 +7,9 @@ import com.fan.crawler.base.info.BidInfo;
  */
 public interface BidDAO {
 
+    public int insert(BidInfo bidInfo);
+
     public int update(BidInfo bidInfo);
 
-    public int save(BidInfo bidInfo);
+
 }

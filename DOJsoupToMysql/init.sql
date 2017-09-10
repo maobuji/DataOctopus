@@ -1,8 +1,8 @@
 -- 创建数据库
-drop DATABASE if exists `TENDERDB`;
-CREATE DATABASE `TENDERDB` CHARACTER SET 'utf8'  COLLATE 'utf8_general_ci';
+drop DATABASE if exists `BIDDB`;
+CREATE DATABASE `BIDDB` CHARACTER SET 'utf8'  COLLATE 'utf8_general_ci';
 
-use TENDERDB;
+use BIDDB;
 
 CREATE TABLE T_BID (
   C_ID VARCHAR(32) NOT NULL COMMENT '主键',

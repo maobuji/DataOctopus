@@ -1,7 +1,8 @@
-package com.fan.crawler.service.b2b10086cn;
+package com.fan.crawler.service;
 
-import com.fan.crawler.base.dao.TenderDAO;
 import com.fan.crawler.base.info.BidInfo;
+import com.fan.crawler.base.type.BidType;
+import com.fan.crawler.util.UUIDUtil;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,22 +11,23 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.fan.crawler.base.dao.BidDAO;
+
 import java.io.IOException;
 
 /**
  * Created by Administrator on 2017/9/8.
  */
 @Component
-public class crawler implements Runnable {
+public class B2b10086cn_ZB implements Runnable {
 
-
+    private String kye = "B2b10086cn";
     @Autowired
     private BidDAO bidDAO;
 
     @Override
     public void run() {
 
-        TenderDAO tenderDAO = new TenderDAO();
+
 
 
         String postUrl = "https://b2b.10086.cn/b2b/main/listVendorNoticeResult.html?noticeBean.noticeType=2";
@@ -68,38 +70,41 @@ public class crawler implements Runnable {
             int size = mycontext.size();
 
 
-
-            BidInfo bidInfo = new BidInfo();
-
             for (int j = 2; j < size; j++) {
+                BidInfo bidInfo = new BidInfo();
+                bidInfo.setId(UUIDUtil.getUUID());
+
+
                 Element ss = mycontext.get(j);
                 String[] onclickString = ss.attr("onclick").split("'");
                 if (onclickString.length == 3) {
-                    tenderInfo.setTenderKey(onclickString[1]);
+                    bidInfo.setKey(kye + "_" + onclickString[1]);
+
                 }
 
-                tenderInfo.setOrgName(ss.children().get(0).text());
-                tenderInfo.setTenderType(ss.children().get(1).text());
+                bidInfo.setOrgName(ss.children().get(0).text());
+                // ss.children().get(1).text();
+                bidInfo.setType(BidType.ZHAOBIAO);
+
 
                 if (ss.children().get(2).children().attr("title").equals("")) {
 
-                    tenderInfo.setTenderName(ss.children().get(2).text());
+                    bidInfo.setName(ss.children().get(2).text());
 
                 } else {
-                    tenderInfo.setTenderName(ss.children().get(2).children().attr("title"));
+                    bidInfo.setName(ss.children().get(2).children().attr("title"));
 
                 }
-                tenderInfo.setTenderDate(ss.children().get(3).text());
-
-                String date = tenderInfo.getTenderDate();
-                String[] dates = date.split("-");
-                tenderInfo.setTenderYear(dates[0]);
-                if (dates[1].length() == 1) {
-                    tenderInfo.setTenderYearMonth(dates[0]+"0"+dates[1]);
-                } else {
-                    tenderInfo.setTenderYearMonth(dates[0]+dates[1]);
-                }
-
+//                tenderInfo.setTenderDate(ss.children().get(3).text());
+//
+//                String date = tenderInfo.getTenderDate();
+//                String[] dates = date.split("-");
+//                tenderInfo.setTenderYear(dates[0]);
+//                if (dates[1].length() == 1) {
+//                    tenderInfo.setTenderYearMonth(dates[0] + "0" + dates[1]);
+//                } else {
+//                    tenderInfo.setTenderYearMonth(dates[0] + dates[1]);
+//                }
 
 
                 bidDAO.save(bidInfo);

@@ -11,6 +11,8 @@ public class JobPool implements InitializingBean, DisposableBean {
     @Override
     public void afterPropertiesSet() throws Exception {
 
+        Thread t = new Thread();
+
     }
 
     @Override

@@ -2,35 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.fan.crawler.base.dao.BidDAO">
     <resultMap id="BaseResultMap" type="com.fan.crawler.base.info.BidInfo">
-        <result column="C_ID" property="id" />
-        <result column="C_KEY" property="key" />
-        <result column="C_STATION" property="station" />
-        <result column="C_NAME" property="name" />
-        <result column="C_URL" property="url" />
+        <result column="C_ID" property="id"/>
+        <result column="C_PROJECT_NAME" property="projectName"/>
+        <result column="C_NAME" property="name"/>
+        <result column="C_URL" property="url"/>
     </resultMap>
 
     <parameterMap id="BidInfo" type="com.fan.crawler.base.info.BidInfo"/>
 
     <sql id="Base_Column_List">
-        id, province_id, city_name, description
+        C_ID,C_PROJECT_NAME,C_NAME,C_URL
     </sql>
 
-    <select id="findByName" resultMap="BaseResultMap" parameterType="java.lang.String">
-        select
-        <include refid="Base_Column_List" />
-        from city
-        where city_name = #{cityName}
-    </select>
+    <insert id="insert" parameterType="com.fan.crawler.base.info.BidInfo">
+        insert into T_BID(
+        <include refid="Base_Column_List"/>
+        ) values(#{id},#{projectName}, #{name},#{url})
+    </insert>
 
     <update id="update" parameterType="com.fan.crawler.base.info.BidInfo">
         update T_BID
         <set>
-            <if test="memberName != null">memberName=#{memberName},</if>
-            <if test="memberAccount != null">memberAccount=#{memberAccount},</if>
-            <if test="address != null">address=#{address},</if>
-            <if test="sex != null">sex=#{sex}</if>
+            <if test="name!= null">C_URL=#{name},</if>
+            <if test="projectName!= null">C_PROJECT_NAME=#{projectName},</if>
+            <if test="url!= null">C_URL=#{url},</if>
         </set>
-        where memberId=#{memberId}
+        where C_ID=#{id}
     </update>
 
 </mapper>

@@ -1,8 +1,7 @@
-package com.fan.crawler.service;
+package com.fan.crawler.service.b2b100086cn;
 
 import com.fan.crawler.base.info.BidInfo;
 import com.fan.crawler.base.type.BidType;
-import com.fan.crawler.util.UUIDUtil;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -20,15 +19,15 @@ import java.io.IOException;
 @Component
 public class B2b10086cn_ZB implements Runnable {
 
-    private String kye = "B2b10086cn";
+    private String station = "b2b.10086.cn";
+
+    private String srcType = "ZBGG";
+
     @Autowired
     private BidDAO bidDAO;
 
     @Override
     public void run() {
-
-
-
 
         String postUrl = "https://b2b.10086.cn/b2b/main/listVendorNoticeResult.html?noticeBean.noticeType=2";
         String agentInfo = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36";
@@ -69,31 +68,22 @@ public class B2b10086cn_ZB implements Runnable {
             Elements mycontext = doc.body().getElementsByTag("tbody").get(0).getElementsByTag("tr");
             int size = mycontext.size();
 
-
             for (int j = 2; j < size; j++) {
                 BidInfo bidInfo = new BidInfo();
-                bidInfo.setId(UUIDUtil.getUUID());
-
-
                 Element ss = mycontext.get(j);
                 String[] onclickString = ss.attr("onclick").split("'");
                 if (onclickString.length == 3) {
-                    bidInfo.setKey(kye + "_" + onclickString[1]);
-
+                    bidInfo.setId(station + "_" + srcType + "_" + onclickString[1]);
+                    bidInfo.setUrl("url=" + onclickString[1]);
                 }
 
                 bidInfo.setOrgName(ss.children().get(0).text());
                 // ss.children().get(1).text();
                 bidInfo.setType(BidType.ZHAOBIAO);
-
-
                 if (ss.children().get(2).children().attr("title").equals("")) {
-
                     bidInfo.setName(ss.children().get(2).text());
-
                 } else {
                     bidInfo.setName(ss.children().get(2).children().attr("title"));
-
                 }
 //                tenderInfo.setTenderDate(ss.children().get(3).text());
 //
@@ -105,10 +95,9 @@ public class B2b10086cn_ZB implements Runnable {
 //                } else {
 //                    tenderInfo.setTenderYearMonth(dates[0] + dates[1]);
 //                }
-
-
-                bidDAO.save(bidInfo);
-
+                if (bidDAO.update(bidInfo) == 0) {
+                    bidDAO.insert(bidInfo);
+                }
             }
 
         }

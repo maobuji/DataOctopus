@@ -8,18 +8,17 @@ import java.util.Date;
  * Created by Administrator on 2017/9/8.
  */
 public class BidInfo {
+    // 唯一不重复的业务ID.由网站网址+_+原始类型+_+类型下的唯一序号组成
     private String id;
-    // 唯一不重复的业务ID，不同来源的网站KEY可能不一样
-    private String key;
-    //来源网站，与key做联合去重
-    private String station;
+    // 项目名称
+    private String projectName;
     // 标题或摘要
     private String name;
     // 原始地址的URL,用于后续访问
     private String url;
     // 原始网页数据
     private String context;
-    // 项目类型
+    // 项目的业务类型
     private BidType type;
     // 招标公司顶级组织名称
     private String orgRootName;
@@ -41,22 +40,6 @@ public class BidInfo {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getStation() {
-        return station;
-    }
-
-    public void setStation(String station) {
-        this.station = station;
     }
 
     public String getName() {

@@ -1,6 +1,6 @@
 package com.fan.crawler;
 
-import com.fan.crawler.service.B2b10086cn_ZB;
+import com.fan.crawler.service.b2b100086cn.B2b10086cn_ZB;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;

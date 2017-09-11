@@ -8,13 +8,14 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class MybitisBidDAO implements BidDAO {
+
     @Override
-    public int update(BidInfo bidInfo) {
+    public int insert(BidInfo bidInfo) {
         return 0;
     }
 
     @Override
-    public int save(BidInfo bidInfo) {
+    public int update(BidInfo bidInfo) {
         return 0;
     }
 }

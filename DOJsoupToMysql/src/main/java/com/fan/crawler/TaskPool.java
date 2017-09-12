@@ -1,5 +1,6 @@
 package com.fan.crawler;
 
+import com.fan.crawler.base.service.CrawlerBase;
 import com.fan.crawler.service.b2b100086cn.B2b10086cn_ZB;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
@@ -36,7 +37,12 @@ public class TaskPool implements ApplicationContextAware, InitializingBean, Disp
         tasks.add(B2b10086cn_ZB.class);
 
         for (Class s : tasks) {
-            Runnable runnable = (Runnable) applicationContext.getBean(s);
+            Object task=applicationContext.getBean(s);
+
+            CrawlerBase crawlerBase=(CrawlerBase)task;
+            crawlerBase.setDupStrategy(0);
+
+            Runnable runnable = (Runnable) task;
             Thread t=new Thread(runnable);
             t.setName(s.getSimpleName()+"-Thread");
             t.setDaemon(true);

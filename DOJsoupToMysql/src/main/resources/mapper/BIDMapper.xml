@@ -3,29 +3,41 @@
 <mapper namespace="com.fan.crawler.base.dao.RawBidDAO">
     <resultMap id="BaseResultMap" type="com.fan.crawler.base.info.RawBidInfo">
         <result column="C_ID" property="id"/>
-        <result column="C_PROJECT_NAME" property="projectName"/>
-        <result column="C_NAME" property="name"/>
         <result column="C_URL" property="url"/>
+        <result column="C_STATION" property="station"/>
+        <result column="C_TITLE" property="title"/>
+        <result column="C_CONTENT" property="content"/>
+        <result column="C_BID_TIME" property="bidTime"/>
+        <result column="C_GET_TIME" property="getTime"/>
     </resultMap>
 
     <parameterMap id="RawBidInfo" type="com.fan.crawler.base.info.RawBidInfo"/>
 
     <sql id="Base_Column_List">
-        C_ID,C_PROJECT_NAME,C_NAME,C_URL
+        C_ID,C_URL,C_STATION,C_TITLE,C_CONTENT,C_BID_TIME,C_GET_TIME
     </sql>
 
+
+    <select id="existById" parameterType="String" resultType="boolean">
+        select count(1) from T_RAWBID where C_id=#{id}
+    </select>
+
+
     <insert id="insert" parameterType="com.fan.crawler.base.info.RawBidInfo">
-        insert into T_BID(
+        insert into T_RAWBID(
         <include refid="Base_Column_List"/>
-        ) values(#{id},#{projectName}, #{name},#{url})
+        ) values(#{id},#{url}, #{station},#{title},#{content},#{bidTime},#{getTime})
     </insert>
 
     <update id="update" parameterType="com.fan.crawler.base.info.RawBidInfo">
-        update T_BID
+        update T_RAWBID
         <set>
-            <if test="name!= null">C_URL=#{name},</if>
-            <if test="projectName!= null">C_PROJECT_NAME=#{projectName},</if>
             <if test="url!= null">C_URL=#{url},</if>
+            <if test="station!= null">C_STATION=#{station},</if>
+            <if test="title!= null">C_TITLE=#{title},</if>
+            C_CONTENT=#{content},
+            C_BID_TIME=#{bidTime},
+            C_GET_TIME=#{getTime}
         </set>
         where C_ID=#{id}
     </update>

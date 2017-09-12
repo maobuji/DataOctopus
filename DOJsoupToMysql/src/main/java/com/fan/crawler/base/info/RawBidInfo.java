@@ -12,8 +12,10 @@ public class RawBidInfo {
     private String id;
     // 原始地址的URL,用于后续访问
     private String url;
+    // 数据来源网站
+    private String station;
     // 标题或摘要
-    private String name;
+    private String title;
     // 原始网页数据
     private String content;
     // 业务时间
@@ -37,12 +39,20 @@ public class RawBidInfo {
         this.url = url;
     }
 
-    public String getName() {
-        return name;
+    public String getStation() {
+        return station;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setStation(String station) {
+        this.station = station;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getContent() {

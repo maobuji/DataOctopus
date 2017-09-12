@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Created by zhang on 2017/9/12.
  */
-public class SHAUtil {
+public class DigestUtil {
     /**
      * 利用java原生的摘要实现SHA256加密
      *
@@ -47,5 +47,14 @@ public class SHAUtil {
             stringBuffer.append(temp);
         }
         return stringBuffer.toString();
+    }
+
+    public static void main(String[] args) {
+        String url="https://b2b.10086.cn/b2b/main/viewNoticeContent.html?noticeBean.id=";
+        try {
+            System.out.println(getSHA256StrJava(url));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 }

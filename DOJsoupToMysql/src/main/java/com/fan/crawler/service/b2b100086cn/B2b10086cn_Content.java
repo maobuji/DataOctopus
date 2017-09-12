@@ -14,6 +14,10 @@ import java.io.IOException;
 public class B2b10086cn_Content {
 
 
+    public static String getUrl(String key){
+        return postUrl+key;
+    }
+
     public static String getContent(String key) {
         Connection con = getJSoupConnection("");
         Document doc = null;

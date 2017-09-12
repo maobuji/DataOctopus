@@ -1,7 +1,9 @@
 package com.fan.crawler.service.b2b100086cn;
 
 import com.fan.crawler.base.info.RawBidInfo;
+import com.fan.crawler.base.service.CrawlerBase;
 import com.fan.crawler.base.type.BidType;
+import com.fan.crawler.base.util.DigestUtil;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,23 +14,27 @@ import org.springframework.stereotype.Component;
 import com.fan.crawler.base.dao.RawBidDAO;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Administrator on 2017/9/8.
  */
 @Component
-public class B2b10086cn_ZB implements Runnable {
+public class B2b10086cn_ZB extends CrawlerBase implements Runnable {
 
 
     @Autowired
     private RawBidDAO bidDAO;
 
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
     @Override
     public void run() {
         String station = "b2b.10086.cn";
-        String srcType = "ZBGG";
-
-        int max = 8372;
+        int max = 100000000;
         for (int page = 1; page <= max; page++) {
             System.out.println("第" + page + "页");
             Connection con = getJSoupConnection(page);
@@ -44,36 +50,70 @@ public class B2b10086cn_ZB implements Runnable {
             Elements mycontext = doc.body().getElementsByTag("tbody").get(0).getElementsByTag("tr");
             int size = mycontext.size();
 
+            if (size == 2) {
+                System.out.println("B2b10086cn_ZB抓取结束");
+            }
+
+
             for (int j = 2; j < size; j++) {
+
+
                 RawBidInfo rawBidInfo = new RawBidInfo();
+
+                rawBidInfo.setStation(station);
+
                 Element ss = mycontext.get(j);
-                // 获取名字
                 String[] onclickString = ss.attr("onclick").split("'");
+
+                // 获取公告ID
+                String key = "";
                 if (onclickString.length == 3) {
-                    rawBidInfo.setId(station + "_" + srcType + "_" + onclickString[1]);
-                    rawBidInfo.setUrl("url=" + onclickString[1]);
+                    key = onclickString[1];
                 }
 
-                // 获取组织名称
-                rawBidInfo.setOrgName(ss.children().get(0).text());
-                // ss.children().get(1).text();
-                rawBidInfo.setType(BidType.ZHAOBIAO);
-                if (ss.children().get(2).children().attr("title").equals("")) {
-                    rawBidInfo.setName(ss.children().get(2).text());
-                } else {
-                    rawBidInfo.setName(ss.children().get(2).children().attr("title"));
+                // 获取公告的原始地址
+                rawBidInfo.setUrl(B2b10086cn_Content.getUrl(key));
+
+                // 设置主键
+                try {
+                    rawBidInfo.setId(DigestUtil.getSHA256StrJava(rawBidInfo.getUrl()));
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
                 }
-//                tenderInfo.setTenderDate(ss.children().get(3).text());
-//
-//                String date = tenderInfo.getTenderDate();
-//                String[] dates = date.split("-");
-//                tenderInfo.setTenderYear(dates[0]);
-//                if (dates[1].length() == 1) {
-//                    tenderInfo.setTenderYearMonth(dates[0] + "0" + dates[1]);
-//                } else {
-//                    tenderInfo.setTenderYearMonth(dates[0] + dates[1]);
-//                }
-                if (bidDAO.update(rawBidInfo) == 0) {
+
+                // 获取是否重复
+                boolean isdup = bidDAO.existById(rawBidInfo.getId());
+
+                // 如果重复，且为跳过，则continue；
+                if (isdup && getDupStrategy() == 0) {
+                    continue;
+                }
+
+                // 获取公告的标题
+                if (ss.children().get(2).children().attr("title").equals("")) {
+                    rawBidInfo.setTitle(ss.children().get(2).text());
+                } else {
+                    rawBidInfo.setTitle(ss.children().get(2).children().attr("title"));
+                }
+
+                // 获取公告时间
+                try {
+                    String strDate = ss.children().get(3).text();
+                    rawBidInfo.setBidTime(sdf.parse(strDate));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                // 获取公告的内容
+                rawBidInfo.setContent(B2b10086cn_Content.getContent(key));
+
+                // 获取抓取时间
+                rawBidInfo.setGetTime(new Date());
+
+                // 如果重复则更新，如果不重复则插入
+                if (isdup) {
+                    bidDAO.update(rawBidInfo);
+                } else {
                     bidDAO.insert(rawBidInfo);
                 }
             }

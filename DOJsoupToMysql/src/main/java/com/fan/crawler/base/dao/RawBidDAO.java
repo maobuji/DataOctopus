@@ -11,5 +11,5 @@ public interface RawBidDAO {
 
     public int update(RawBidInfo rawBidInfo);
 
-
+    public boolean existById(String id);
 }

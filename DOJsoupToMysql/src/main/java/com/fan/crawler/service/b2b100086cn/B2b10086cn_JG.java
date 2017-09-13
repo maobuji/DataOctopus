@@ -1,8 +1,8 @@
 package com.fan.crawler.service.b2b100086cn;
 
+import com.fan.crawler.base.dao.RawBidDAO;
 import com.fan.crawler.base.info.RawBidInfo;
 import com.fan.crawler.base.service.CrawlerBase;
-import com.fan.crawler.base.type.BidType;
 import com.fan.crawler.base.util.DigestUtil;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.fan.crawler.base.dao.RawBidDAO;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -26,8 +25,8 @@ import java.util.Date;
  * Created by Administrator on 2017/9/8.
  */
 @Component
-public class B2b10086cn_ZB extends CrawlerBase implements Runnable {
-    private static Logger logger = LoggerFactory.getLogger(B2b10086cn_ZB.class);
+public class B2b10086cn_JG extends CrawlerBase implements Runnable {
+    private static Logger logger = LoggerFactory.getLogger(B2b10086cn_JG.class);
 
 
     @Autowired
@@ -133,7 +132,7 @@ public class B2b10086cn_ZB extends CrawlerBase implements Runnable {
 
     }
 
-    private static String postUrl = "https://b2b.10086.cn/b2b/main/listVendorNoticeResult.html?noticeBean.noticeType=2";
+    private static String postUrl = "https://b2b.10086.cn/b2b/main/listVendorNoticeResult.html?noticeBean.noticeType=7";
     private static String agentInfo = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36";
 
     private Connection getJSoupConnection(int page) {

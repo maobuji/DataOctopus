@@ -4,6 +4,8 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -13,24 +15,17 @@ import java.io.IOException;
 
 public class B2b10086cn_Content {
 
+    private static Logger logger = LoggerFactory.getLogger(B2b10086cn_Content.class);
 
-    public static String getUrl(String key){
-        return postUrl+key;
+    public static String getUrl(String key) {
+        return postUrl + key;
     }
 
-    public static String getContent(String key) {
+    public static String getContent(String key) throws IOException {
         Connection con = getJSoupConnection("");
-        Document doc = null;
-
-        String content = null;
-
-        try {
-            doc = con.post();
-            Elements mycontext = doc.body().getElementsByTag("tbody");
-            content = mycontext.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Document doc = con.post();
+        Elements mycontext = doc.body().getElementsByTag("tbody");
+        String content = mycontext.toString();
         return content;
 
     }

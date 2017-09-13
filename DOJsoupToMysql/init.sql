@@ -13,7 +13,9 @@ CREATE TABLE T_RAWBID (
   C_BID_TIME timestamp  NULL COMMENT '招标时间',
   C_GET_TIME timestamp  NULL COMMENT '获取时间',
   PRIMARY KEY (C_ID) COMMENT '主键'
-);
+)
+ROW_FORMAT=COMPRESSED
+;
 /**
   C_TYPE VARCHAR(10)  NULL COMMENT '类型:拟建项目(拟建),招标预告（预告）,公告（招标,比选,邀标,询价,竞谈,单一,竞价,变更）,招标结果(中标,成交,废标,流标),招标信用信息（合同,验收，违规,其他）',
   C_PUR_ORG VARCHAR(50)   NULL COMMENT '采购方',

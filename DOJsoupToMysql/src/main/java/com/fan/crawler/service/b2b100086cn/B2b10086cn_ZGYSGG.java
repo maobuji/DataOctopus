@@ -103,6 +103,10 @@ public class B2b10086cn_ZGYSGG extends CrawlerBase implements Runnable {
                 // 获取公告时间
                 try {
                     String strDate = ss.children().get(3).text();
+
+                    if(strDate.equals("2429-7-5")){
+                        continue;
+                    }
                     rawBidInfo.setBidTime(sdf.parse(strDate));
                 } catch (ParseException e) {
                     logger.error("格式化时间失败，key="+key,e);

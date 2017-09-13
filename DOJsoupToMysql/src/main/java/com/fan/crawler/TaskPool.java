@@ -1,8 +1,10 @@
 package com.fan.crawler;
 
 import com.fan.crawler.base.service.CrawlerBase;
-import com.fan.crawler.service.b2b100086cn.B2b10086cn_JG;
-import com.fan.crawler.service.b2b100086cn.B2b10086cn_ZB;
+import com.fan.crawler.service.b2b100086cn.B2b10086cn_DYLYCGXXGG;
+import com.fan.crawler.service.b2b100086cn.B2b10086cn_JGGS;
+import com.fan.crawler.service.b2b100086cn.B2b10086cn_CGGG;
+import com.fan.crawler.service.b2b100086cn.B2b10086cn_ZGYSGG;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -35,8 +37,10 @@ public class TaskPool implements ApplicationContextAware, InitializingBean, Disp
 
         // 寻找任务并启动执行
         List<Class> tasks = new ArrayList<Class>();
-        tasks.add(B2b10086cn_ZB.class);
-        tasks.add(B2b10086cn_JG.class);
+        tasks.add(B2b10086cn_CGGG.class);
+        tasks.add(B2b10086cn_ZGYSGG.class);
+        tasks.add(B2b10086cn_JGGS.class);
+        tasks.add(B2b10086cn_DYLYCGXXGG.class);
 
         for (Class s : tasks) {
             Object task=applicationContext.getBean(s);

@@ -25,8 +25,8 @@ import java.util.Date;
  * Created by Administrator on 2017/9/8.
  */
 @Component
-public class B2b10086cn_JG extends CrawlerBase implements Runnable {
-    private static Logger logger = LoggerFactory.getLogger(B2b10086cn_JG.class);
+public class B2b10086cn_ZGYSGG extends CrawlerBase implements Runnable {
+    private static Logger logger = LoggerFactory.getLogger(B2b10086cn_ZGYSGG.class);
 
 
     @Autowired
@@ -132,7 +132,7 @@ public class B2b10086cn_JG extends CrawlerBase implements Runnable {
 
     }
 
-    private static String postUrl = "https://b2b.10086.cn/b2b/main/listVendorNoticeResult.html?noticeBean.noticeType=7";
+    private static String postUrl = "https://b2b.10086.cn/b2b/main/listVendorNoticeResult.html?noticeBean.noticeType=3";
     private static String agentInfo = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36";
 
     private Connection getJSoupConnection(int page) {

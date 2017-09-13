@@ -57,7 +57,7 @@ public class B2b10086cn_ZGYSGG extends CrawlerBase implements Runnable {
 
             if (size == 2) {
                 logger.info("抓取结束");
-
+                break;
             }
 
 

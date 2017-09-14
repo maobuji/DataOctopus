@@ -34,7 +34,7 @@ public class B2b10086cn_Content {
     private static String agentInfo = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36";
 
     private static Connection getJSoupConnection(String key) {
-        Connection con = Jsoup.connect(postUrl + key).userAgent(agentInfo).timeout(5000);
+        Connection con = Jsoup.connect(postUrl + key).userAgent(agentInfo).timeout(10000);
         con.header("Accept", "*/*");
         con.header("Accept-Encoding", "gzip, deflate, br");
         con.header("Accept-Language", "en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4");

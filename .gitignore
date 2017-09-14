@@ -7,3 +7,5 @@
 *.iml
 out
 gen
+.ipython
+.ipynb_checkpoints

@@ -40,7 +40,7 @@ public class B2b10086cn_JGGS extends CrawlerBase implements Runnable {
         logger.info("开始抓取");
         String station = "b2b.10086.cn";
         int max = 100000000;
-        for (int page = 1; page <= max; page++) {
+        for (int page = 2543; page <= max; page++) {
             logger.info("第" + page + "页");
             Connection con = getJSoupConnection(page);
             Document doc = null;
@@ -121,10 +121,15 @@ public class B2b10086cn_JGGS extends CrawlerBase implements Runnable {
                 rawBidInfo.setGetTime(new Date());
 
                 // 如果重复则更新，如果不重复则插入
-                if (isdup) {
-                    bidDAO.update(rawBidInfo);
-                } else {
-                    bidDAO.insert(rawBidInfo);
+                try {
+                    if (isdup) {
+                        bidDAO.update(rawBidInfo);
+                    } else {
+                        bidDAO.insert(rawBidInfo);
+                    }
+                } catch (Exception e) {
+                    logger.error("存储失败，key=" + key, e);
+                    continue;
                 }
             }
 

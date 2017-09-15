@@ -121,10 +121,15 @@ public class B2b10086cn_DYLYCGXXGG extends CrawlerBase implements Runnable {
                 rawBidInfo.setGetTime(new Date());
 
                 // 如果重复则更新，如果不重复则插入
-                if (isdup) {
-                    bidDAO.update(rawBidInfo);
-                } else {
-                    bidDAO.insert(rawBidInfo);
+                try {
+                    if (isdup) {
+                        bidDAO.update(rawBidInfo);
+                    } else {
+                        bidDAO.insert(rawBidInfo);
+                    }
+                } catch (Exception e) {
+                    logger.error("存储失败，key=" + key, e);
+                    continue;
                 }
             }
 

@@ -40,14 +40,14 @@ public class B2b10086cn_CGGG extends CrawlerBase implements Runnable {
         logger.info("开始抓取");
         String station = "b2b.10086.cn";
         int max = 100000000;
-        for (int page = 1; page <= max; page++) {
+        for (int page = 2650; page <= max; page++) {
             logger.info("第" + page + "页");
             Connection con = getJSoupConnection(page);
             Document doc = null;
             try {
                 doc = con.post();
             } catch (IOException e) {
-                logger.error("获取列表失败",e);
+                logger.error("获取列表失败", e);
                 page--;
                 continue;
             }
@@ -82,7 +82,7 @@ public class B2b10086cn_CGGG extends CrawlerBase implements Runnable {
                 try {
                     rawBidInfo.setId(DigestUtil.getSHA256StrJava(rawBidInfo.getUrl()));
                 } catch (NoSuchAlgorithmException e) {
-                    logger.error("计算主键失败，key="+key,e);
+                    logger.error("计算主键失败，key=" + key, e);
                 }
 
                 // 获取是否重复
@@ -105,14 +105,14 @@ public class B2b10086cn_CGGG extends CrawlerBase implements Runnable {
                     String strDate = ss.children().get(3).text();
                     rawBidInfo.setBidTime(sdf.parse(strDate));
                 } catch (ParseException e) {
-                    logger.error("格式化时间失败，key="+key,e);
+                    logger.error("格式化时间失败，key=" + key, e);
                 }
 
                 // 获取公告的内容
                 try {
                     rawBidInfo.setContent(B2b10086cn_Content.getContent(key));
                 } catch (IOException e) {
-                    logger.error("获取内容失败，key="+key,e);
+                    logger.error("获取内容失败，key=" + key, e);
                     rowNum--;
                     continue;
                 }
@@ -121,10 +121,15 @@ public class B2b10086cn_CGGG extends CrawlerBase implements Runnable {
                 rawBidInfo.setGetTime(new Date());
 
                 // 如果重复则更新，如果不重复则插入
-                if (isdup) {
-                    bidDAO.update(rawBidInfo);
-                } else {
-                    bidDAO.insert(rawBidInfo);
+                try {
+                    if (isdup) {
+                        bidDAO.update(rawBidInfo);
+                    } else {
+                        bidDAO.insert(rawBidInfo);
+                    }
+                } catch (Exception e) {
+                    logger.error("存储失败，key=" + key, e);
+                    continue;
                 }
             }
 

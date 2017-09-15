@@ -38,9 +38,9 @@ public class TaskPool implements ApplicationContextAware, InitializingBean, Disp
         // 寻找任务并启动执行
         List<Class> tasks = new ArrayList<Class>();
         tasks.add(B2b10086cn_CGGG.class);
-        tasks.add(B2b10086cn_ZGYSGG.class);
+        //tasks.add(B2b10086cn_ZGYSGG.class);
         tasks.add(B2b10086cn_JGGS.class);
-        tasks.add(B2b10086cn_DYLYCGXXGG.class);
+        //tasks.add(B2b10086cn_DYLYCGXXGG.class);
 
         for (Class s : tasks) {
             Object task=applicationContext.getBean(s);

@@ -1,9 +1,14 @@
 package com.fan.crawler.base.service;
 
+import com.fan.crawler.base.dao.RawBidDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+
 /**
  * Created by Administrator on 2017/9/12.
  */
 public class CrawlerBase {
+
+
 
     // 遇到多少条重复记录，则停止爬取
     private int dupStopNum = 10000000;

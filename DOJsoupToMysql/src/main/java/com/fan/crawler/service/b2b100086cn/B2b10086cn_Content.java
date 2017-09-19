@@ -21,8 +21,8 @@ public class B2b10086cn_Content {
         return postUrl + key;
     }
 
-    public static String getContent(String key) throws IOException {
-        Connection con = getJSoupConnection("");
+    public static String getContent(String urlKey) throws IOException {
+        Connection con = getJSoupConnection(urlKey);
         Document doc = con.post();
         Elements mycontext = doc.body().getElementsByTag("tbody");
         String content = mycontext.toString();
@@ -33,8 +33,9 @@ public class B2b10086cn_Content {
     private static String postUrl = "https://b2b.10086.cn/b2b/main/viewNoticeContent.html?noticeBean.id=";
     private static String agentInfo = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36";
 
-    private static Connection getJSoupConnection(String key) {
-        Connection con = Jsoup.connect(postUrl + key).userAgent(agentInfo).timeout(10000);
+    private static Connection getJSoupConnection(String urlKey) {
+        String myUrl=postUrl + urlKey;
+        Connection con = Jsoup.connect(myUrl).userAgent(agentInfo).timeout(10000);
         con.header("Accept", "*/*");
         con.header("Accept-Encoding", "gzip, deflate, br");
         con.header("Accept-Language", "en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4");
@@ -48,4 +49,6 @@ public class B2b10086cn_Content {
 
         return con;
     }
+
+    //
 }

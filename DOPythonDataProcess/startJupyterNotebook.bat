@@ -1,4 +1,5 @@
 SET home=%cd%
 
 cd  %home%
-start jupyter notebook
+activate python36
+echo jupyter notebook

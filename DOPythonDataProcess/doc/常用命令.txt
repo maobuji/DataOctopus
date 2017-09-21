@@ -1,0 +1,15 @@
+
+#
+// 安装一个指定版本
+conda create --name python36 python=3.6
+// 激活版本
+activate python36
+// 关闭版本
+deactivate python36
+// 安装一个2.7版本的
+conda create --name python27 python=2.7
+
+// 查看当前版本列表
+conda info -e
+
+conda install nb_conda

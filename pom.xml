@@ -13,6 +13,7 @@
         <module>TestCanal</module>
         <module>DOCanalToKafka</module>
         <module>DOJsoupToMysql</module>
+        <module>DOSplitWord</module>
     </modules>
 
 

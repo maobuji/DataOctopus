@@ -11,7 +11,7 @@ conda create --name python27 python=2.7
 
 // 查看当前版本列表
 conda info -e
-
+activate python36
 conda install nb_conda
 
 jupyter notebook --generate-config

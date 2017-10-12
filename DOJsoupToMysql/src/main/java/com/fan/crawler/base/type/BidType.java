@@ -10,7 +10,7 @@ public enum BidType {
     // 招标预告
     YUGAO("预告"),
     // 招标公告
-    ZHAOBIAO("招标"), BIXUAN("比选"),YAOBIAO("邀标"), XUNJIA("询价"), JINGTAN("竞谈"), DANYI("单一"), JINGJIA("竞价"), BIANGENG("变更"),
+    ZHAOBIAO("招标"), YAOBIAO("邀标"), XUNJIA("询价"), JINGTAN("竞谈"), DANYI("单一"), JINGJIA("竞价"), BIANGENG("变更"),
     // 招标结果
     ZHONGBIAO("中标"), CHENGJIAO("成交"), FEIBIAO("废标"), LIUBIAO("流标"),
     //招标信用信息

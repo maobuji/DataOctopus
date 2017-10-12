@@ -16,6 +16,15 @@ CREATE TABLE T_RAWBID (
 )
 ROW_FORMAT=COMPRESSED
 ;
+
+CREATE TABLE T_RAWBID_PRACTICE (
+  C_ID VARCHAR(64) NOT NULL COMMENT 'URL的SHA散列',
+  C_URL VARCHAR(255)  NOT NULL COMMENT '原始地址的URL,用于后续访问',
+  C_BID_TYPE VARCHAR(255)   NULL COMMENT '招投标类型',
+  C_BIDA VARCHAR(255)   NULL COMMENT '招投标地域',
+  PRIMARY KEY (C_ID) COMMENT '主键'
+)ＡＲＥＡ
+
 /**
   C_TYPE VARCHAR(10)  NULL COMMENT '类型:拟建项目(拟建),招标预告（预告）,公告（招标,比选,邀标,询价,竞谈,单一,竞价,变更）,招标结果(中标,成交,废标,流标),招标信用信息（合同,验收，违规,其他）',
   C_PUR_ORG VARCHAR(50)   NULL COMMENT '采购方',

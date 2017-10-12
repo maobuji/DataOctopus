@@ -13,6 +13,8 @@ conda create --name python27 python=2.7
 conda info -e
 activate python36
 conda install nb_conda
+conda install pymysql
+conda install numpy
 
 jupyter notebook --generate-config
 c.NotebookApp.iopub_data_rate_limit = 10000000

@@ -1,7 +1,6 @@
 SET home=%cd%
 
 cd  %home%
-start activate python36
-echo jupyter notebook
+start cmd /k "activate python36&&jupyter notebook"
 
 
